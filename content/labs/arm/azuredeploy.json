@@ -14,6 +14,15 @@
         "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
       }
     },
+
+    "commandToExecute": {
+      "type": "string",
+      "metadata": {
+        "description": "Command to execute - custom script."
+      }
+    },
+
+
     "vmSize": {
       "type": "string",
       "defaultValue": "Standard_F1",
