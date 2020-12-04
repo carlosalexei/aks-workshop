@@ -15,14 +15,6 @@
       }
     },
 
-    "commandToExecute": {
-      "type": "string",
-      "metadata": {
-        "description": "Command to execute - custom script."
-      }
-    },
-
-
     "vmSize": {
       "type": "string",
       "defaultValue": "Standard_F1",
@@ -272,7 +264,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/carlosalexei/aks-workshop/main/content/labs/scripts/customscript.sh"
           ],
-          "commandToExecute": "[parameters('commandToExecute')]"
+          "commandToExecute": "sh customscript.sh"
         }
       }
     }

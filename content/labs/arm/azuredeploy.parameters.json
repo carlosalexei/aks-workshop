@@ -8,9 +8,6 @@
       "dnsNameForPublicIP": {
         "value": "GEN-UNIQUE"
       },
-      "commandToExecute": {
-        "value": "sh customscript.sh"
-      },
       "adminPasswordOrKey": {
         "value": "GEN-SSH-PUB-KEY"
       }
