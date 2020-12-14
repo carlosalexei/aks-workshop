@@ -1,7 +1,3 @@
-# Install Docker 
-echo ******* Docker >> events.log
-sudo snap install docker
-
 # Install .NET 5.0
 echo ******* Installing .NET 5.0 >> events.log
 sudo snap install dotnet-sdk --classic 
