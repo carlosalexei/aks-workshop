@@ -121,9 +121,22 @@
             }
           },
           {
-            "name": "default-allow-8080",
+            "name": "default-allow-80",
             "properties": {
               "priority": 1100,
+              "access": "Allow",
+              "direction": "Inbound",
+              "destinationPortRange": "80",
+              "protocol": "Tcp",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*"
+            }
+          },
+          {
+            "name": "default-allow-8080",
+            "properties": {
+              "priority": 1200,
               "access": "Allow",
               "direction": "Inbound",
               "destinationPortRange": "8080",
