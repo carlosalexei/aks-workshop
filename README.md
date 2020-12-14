@@ -19,13 +19,13 @@ In the first part of this workshop, you will learn the basics. How Docker works,
     </thead>
     <tbody>
         <tr>
-            <td>7:00 - 7:30</td>
+            <td>7:00 - 7:45</td>
             <td>Introduction to Docker</td>
             <td>Containers Orchestration</td>
             <td>Managing your Kubernetes cluster</td>
         </tr>
         <tr>
-            <td>7:30 - 9:30</td>
+            <td>7:45 - 9:00</td>
             <td>Hands-on Lab: Containerizing an Application</td>
             <td>Hands-on Lab: Deploying application on Kubernetes</td>
             <td>Hands-on Lab: Managing and Monitoring</td>
@@ -36,3 +36,6 @@ In the first part of this workshop, you will learn the basics. How Docker works,
 ### Prerequisites
 
 Please check the <a href="./content/labs/00.setup.md">pre-requisites for Hands-on Labs</a>.  
+
+### Hands-on Labs   
+[Day 01](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/01.docker.md)
