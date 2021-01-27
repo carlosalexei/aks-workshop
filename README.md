@@ -41,3 +41,5 @@ Please check the <a href="./content/labs/00.setup.md">pre-requisites for Hands-o
 [Day 01](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/01.docker.md)
 
 [Day 02](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/02.basic-aks.md)
+
+[Day 03](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/03.managing-aks.md)
