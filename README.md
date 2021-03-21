@@ -5,6 +5,9 @@ Welcome to the AKS Workshop.
 ## Part 1 - Introduction to Containers, Docker, and Kubernetes with AKS
 In the first part of this workshop, you will learn the basics. How Docker works, how to package an application and deploy it using containers using Docker, why you might require an Orchestrator, and how to deploy your application on Kubernetes with Azure Kubernetes Services.
 
+### Upcoming sessions
+Check upcoming workshops at [https://aka.ms/mpn/event/aks](https://aka.ms/mpn/event/aks)
+
 
 ### Agenda
 
@@ -22,7 +25,7 @@ In the first part of this workshop, you will learn the basics. How Docker works,
             <td>7:00 - 7:45</td>
             <td>Introduction to Docker</td>
             <td>Containers Orchestration</td>
-            <td>Managing your Kubernetes cluster</td>
+            <td>Understanding your Kubernetes cluster</td>
         </tr>
         <tr>
             <td>7:45 - 9:00</td>
