@@ -1,17 +1,23 @@
 # AKS Workshop
 
-Welcome to the AKS Workshop.
+### Welcome to the Azure Kubernetes Service Workshop.
 
-## Part 1 - Introduction to Containers, Docker, and Kubernetes with AKS
-In the first part of this workshop, you will learn the basics. How Docker works, how to package an application and deploy it using containers using Docker, why you might require an Orchestrator, and how to deploy your application on Kubernetes with Azure Kubernetes Services.
+In this workshop, you'll go through tasks to deploy a multicontainer application to Kubernetes on Azure Kubernetes Service (AKS).
 
+### Learning Objectives
+* Create an Azure Kubernetes Service cluster
+* Choose the best deployment options for your Pods
+* Expose Pods to internal and external network users
+* Configure the Azure Kubernetes Service ingress
+* Monitor the health of an Azure Kubernetes Service cluster
+* Scale your application in an Azure Kubernetes Service cluster
+* Create a continuous integration pipeline with GitHub Actions 
 
 ### Agenda
 
 <table>
     <thead>
         <tr>
-            <td></tb>
             <td>Day 1</tb>
             <td>Day 2</tb>
             <td>Day 3</tb>
@@ -19,27 +25,27 @@ In the first part of this workshop, you will learn the basics. How Docker works,
     </thead>
     <tbody>
         <tr>
-            <td>7:00 - 7:45</td>
-            <td>Introduction to Docker</td>
-            <td>Containers Orchestration</td>
-            <td>Managing your Kubernetes cluster</td>
+            <td>Kubernetes Architecture and components</td>
+            <td>Managing AKS</td>
+            <td>Continous Integration with GitHub</td>
         </tr>
         <tr>
-            <td>7:45 - 9:00</td>
-            <td>Hands-on Lab: Containerizing an Application</td>
-            <td>Hands-on Lab: Deploying application on Kubernetes</td>
-            <td>Hands-on Lab: Managing and Monitoring</td>
+            <td>Hands-on Lab: Deploying applications to AKS</td>
+            <td>Hands-on Lab: Integration, Monitoring, Scaling</td>
+            <td>Hands-on Lab: DevOps with GitHub Actions</td>
         </tr>
     </tbody>
 </table>
 
-### Prerequisites
+### Setup and Prerequisites
 
-Please check the <a href="./content/labs/00.setup.md">pre-requisites for Hands-on Labs</a>.  
+Please check the <a href="./content/labs/setup/00.setup.md">setup instructions and  pre-requisites for Hands-on Labs</a>.  
 
 ### Hands-on Labs   
-[Day 01](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/01.docker.md)
+* [Day 0 - Understanding Containers and Docker](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/00.docker.md) (optional)
 
-[Day 02](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/02.basic-aks.md)
+* [Day 1 - Deploying applications to Azure Kubernetes Service](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/01.basic-aks.md)
 
-[Day 03](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/03.managing-aks.md)
+* Day 2 - Coming soon 
+
+* Day 3 - Coming soon
