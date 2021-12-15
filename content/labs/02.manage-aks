@@ -1,0 +1,282 @@
+
+# Hands-on Lab - Day 2
+
+### Tools for this Lab
+* Azure Command-Line Interface (Az CLI) on Bash.
+
+
+
+## Exercise 1 - Deploy a Kubernetes ingress controller running NGINX
+A Kubernetes ingress controller is software that provides layer 7 load balancer features, including: reverse proxy, configurable traffic routing and TLS termination for Kubernetes services.
+
+The ingress controllers are exposed to the internet by using a Kubernetes service of type LoadBalancer.
+
+
+#### Task 1 - Create a namespace for the ingress
+```
+kubectl create namespace ingress
+```
+
+
+#### Task 2 - Configure the Helm client to use the stable repository
+```
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+```
+
+
+#### Task 3 - Install the NGINX ingress controller with two replicas
+```
+helm install nginx-ingress ingress-nginx/ingress-nginx \
+    --namespace ingress \
+    --set controller.replicaCount=2 \
+    --set controller.nodeSelector."kubernetes\.io/os"=linux \
+    --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
+```
+
+
+#### Task 4 - Check the public IP of the ingress service
+```
+kubectl get services --namespace ingress -w
+```
+
+#### Task 5 - Reconfigure the ratings web service to use ClusterIP
+Change ratings-web service definition from LoadBalancer to ClusterIP
+```
+sed -i 's/LoadBalancer/ClusterIP/g' ratings-web-service.yaml
+```
+
+The type of a deployed services could not be changes. You have to delete the service and re-create it with the new configuration
+```
+kubectl delete service -n ratingsapp ratings-web
+```
+
+Re-create the service as ClusterIP
+```
+kubectl apply -n ratingsapp -f ratings-web-service.yaml
+```
+
+
+#### Task 6 - Set up an Ingress resource with a route to the ratings-web-service
+Create the yaml the new yaml file
+```
+vi ratings-web-ingress.yaml
+```
+
+Paste the following definitions and change the `host` key for the dashed public IP (External-IP) of your Ingress Controller service
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ratings-web-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - host: frontend.<ingress ip>.nip.io # IMPORTANT: update <ingress ip> with the dashed public IP of your ingress, for example frontend.40-78-121-234.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ratings-web
+            port:
+              number: 80
+        
+```
+
+
+## Exercise 2 - Enable SSL/TLS on the front-end ingress
+The online security and privacy of user data is a primary concern for everybody. It's important the ratings website allows HTTPS connections to all customers. 
+
+This exercise demonstrate how to use cert-manager, which provides automatic Let's Encrypt certificate generation and management.
+
+#### Task 1 - Deploy cert-manager
+```
+kubectl create namespace cert-manager
+```
+
+#### Task 2 - Install the Jetstack Helm repository to find and install cert-manager
+```
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+```
+
+
+#### Task 3 - Deploy the cert-manager CRD (Custom Resource Definition) 
+```
+kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml
+```
+
+#### Task 4 - Install the cert-manager Helm chart
+```
+helm install cert-manager \
+    --namespace cert-manager \
+    --version v0.14.0 \
+    jetstack/cert-manager
+```
+
+
+#### Task 5 - Verify the running pods on the cert-manager namespace 
+```
+kubectl get pods --namespace cert-manager
+```
+
+
+#### Task 6 - Deploy a ClusterIssuer resource  
+Create a new yaml file
+```
+vi cluster-issuer.yaml
+```
+
+Paste the following text in the file and replace the `email` key with a valid email
+```yaml
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: <your email> # IMPORTANT: Replace with a valid email from your organization
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+```
+
+
+#### Task 7 - Deploy the cluster-issuer configuration 
+```
+kubectl apply \
+    --namespace ratingsapp \
+    -f cluster-issuer.yaml
+```
+
+#### Task 8 - Enable SSL/TLS for the ratings web service on the Ingress 
+Create a new yaml file
+```
+vi ratings-web-ingress.yaml
+```
+
+Add the following lines after line 6 (kubernetes.io/ingress.class: nginx) and before the `rules` key
+```yaml
+cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+    - hosts:
+      - frontend.<ingress ip>.nip.io # IMPORTANT: update <ingress ip> with the dashed public IP of your ingress, for example frontend.13-68-177-68.nip.io
+      secretName: ratings-web-cert
+```
+
+The yaml files should look like the following one but with your own dashed IP address
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ratings-web-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+    - hosts:
+      - frontend.<ingress ip>.nip.io
+      secretName: ratings-web-cert
+  rules:
+  - host: frontend.<ingress ip>.nip.io # IMPORTANT: update <ingress ip> with the dashed public IP of your ingress, for example frontend.40-78-121-234.nip.io
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ratings-web
+            port:
+              number: 80
+        
+```
+
+#### Task 9 - Deploy the updated Kubernetes ingress file 
+```
+kubectl apply \
+    --namespace ratingsapp \
+    -f ratings-web-ingress.yaml
+```
+
+#### Task 10 - Verify that the certificate was issued 
+```
+kubectl describe cert ratings-web-cert --namespace ratingsapp
+```
+
+#### Task 11 - Test the application 
+Navigate to the host name configured on the ingress. For example, https://frontend.40-78-121-234.nip.io
+
+
+## Exercise 3 - Configure monitor for your application
+The performance of a website depends on your cluster's performance. You can monitor the different components in your application, view logs and get alerts whenever you application goes down or some parts of it fail.
+
+
+#### Task 1 - Define environment variables for this exercise
+
+Identify the random number you used previously. It whould be the numeric characters at the end of your AKS cluster. 
+```
+az aks list -o table
+```
+
+Assign the random number you used to the NUMBER variable. For example if your cluster's name is `k8s-cluster7293` your should assign the variable as follows:
+```
+NUMBER="7293"
+```
+
+Define the rest of the variables
+```
+AKS_NAME="k8s-cluster"$NUMBER
+LOCATION="westus"
+REGISTRY="containerRegistry"$NUMBER
+RESOURCE_GROUP="aksworkshop-RG"
+WORKSPACE="aksworkshop-workspace-"$NUMBER
+```
+
+Verify variables
+```
+echo $AKS_NAME
+echo $LOCATION
+echo $REGISTRY
+echo $RESOURCE_GROUP
+echo $WORKSPACE
+```
+
+
+#### Task 2 - Create a Log Analytics workspace
+```
+az resource create --resource-type Microsoft.OperationalInsights/workspaces \
+        --name $WORKSPACE \
+        --resource-group $RESOURCE_GROUP \
+        --location $LOCATION \
+        --properties '{}' -o table
+```
+
+
+
+#### Task 3 - Get the workspace ID
+```
+WORKSPACE_ID=$(az resource show --resource-type Microsoft.OperationalInsights/workspaces \
+    --resource-group $RESOURCE_GROUP \
+    --name $WORKSPACE \
+    --query "id" -o tsv)
+echo $WORKSPACE_ID
+
+```
+
+
+#### Task 4 - Enable the AKS monitoring add-on 
+```
+az aks enable-addons \
+    --resource-group $RESOURCE_GROUP \
+    --name $AKS_NAME \
+    --addons monitoring \
+    --workspace-resource-id $WORKSPACE_ID
