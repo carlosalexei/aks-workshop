@@ -48,4 +48,4 @@ Please check the <a href="./content/labs/setup/00.setup.md">setup instructions a
 
 * [Day 2 - Managing AKS](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/02.manage-aks.md) 
 
-* Day 3 - Coming soon
+* [Day 3 - Scale and DevOps](https://github.com/carlosalexei/aks-workshop/blob/main/content/labs/03.scale-aks.md)
