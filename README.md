@@ -2,7 +2,7 @@
 
 ### Welcome to the Azure Kubernetes Service Workshop.
 
-In this workshop, you'll go through tasks to deploy a multicontainer application to Kubernetes on Azure Kubernetes Service (AKS).
+In this workshop, you'll go through tasks to deploy a multicontainer application to Kubernetes on Azure Kubernetes Service (AKS). test
 
 ### Learning Objectives
 * Create an Azure Kubernetes Service cluster
