@@ -263,7 +263,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(variables('vmName'),'/installcustomscript')]",
-      "apiVersion": "2015-05-01-preview",
+      "apiVersion": "2019-03-01",
       "location": "[parameters('location')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
@@ -271,7 +271,7 @@
       "properties": {
         "publisher": "Microsoft.Azure.Extensions",
         "type": "CustomScript",
-        "typeHandlerVersion": "2.0",
+        "typeHandlerVersion": "2.1",
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
